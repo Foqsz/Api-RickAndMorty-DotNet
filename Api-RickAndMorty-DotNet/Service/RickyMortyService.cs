@@ -1,53 +1,89 @@
 ﻿using Api_RickAndMorty_DotNet.Service.Interface;
+using Newtonsoft.Json;
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Api_RickAndMorty_DotNet.Model;
 
-namespace Api_RickAndMorty_DotNet.Service;
-
-public class RickyMortyService : IRickyMortyService
+namespace Api_RickAndMorty_DotNet.Service
 {
-    private readonly HttpClient _httpClient;
-    private readonly ILogger _logger;
-
-    public RickyMortyService(HttpClient httpClient, ILogger<RickyMortyService> logger)
+    public class RickyMortyService : IRickyMortyService
     {
-        _httpClient = httpClient;
-        _logger = logger;
-    }
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<RickyMortyService> _logger;
 
-    public async Task<string> GetRickyMortyRandom()
-    {
-        Random randNum = new Random();
-        string RickyMorty = $"https://rickandmortyapi.com/api/character/{randNum.Next(826)}";
-
-        var getRandomRickyMorty = await _httpClient.GetAsync(RickyMorty);
-
-        if (getRandomRickyMorty.IsSuccessStatusCode)
+        public RickyMortyService(HttpClient httpClient, ILogger<RickyMortyService> logger)
         {
-            string responseRandomRickyMorty = await getRandomRickyMorty.Content.ReadAsStringAsync();
-            _logger.LogInformation("Character aleatório gerado.");
-            return responseRandomRickyMorty;
+            _httpClient = httpClient;
+            _logger = logger;
         }
-        else
+         
+        public async Task<string> GetRickyMortyRandom()
         {
-            return "Not Found";
+            Random randNum = new Random();
+            string apiUrl = $"https://rickandmortyapi.com/api/character/{randNum.Next(1, 827)}";
+
+            try
+            {
+                var response = await _httpClient.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    // Desserializa e filtra os dados
+                    var character = JsonConvert.DeserializeObject<CharacterModel>(jsonResponse);
+
+                    string filteredJson = JsonConvert.SerializeObject(character, Formatting.Indented); //retornando filtrado
+
+                    _logger.LogInformation("Character aleatório gerado.");
+                    return filteredJson;
+                }
+                else
+                {
+                    _logger.LogWarning($"Falha ao buscar personagem aleatório: {response.StatusCode}");
+                    return "Not Found";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao obter personagem aleatório: {ex.Message}");
+                return "Erro ao obter dados.";
+            }
         }
-    }
-
-    public async Task<string> GetRickyMortyById(int id)
-    {
-        string RickyMorty = $"https://rickandmortyapi.com/api/character/{id}";
-
-        var getIdRickyMorty = await _httpClient.GetAsync(RickyMorty);
-
-        if (getIdRickyMorty.IsSuccessStatusCode)
+         
+        public async Task<string> GetRickyMortyById(int id)
         {
-            string responseIdRickyMorty = await getIdRickyMorty.Content.ReadAsStringAsync();
-            _logger.LogInformation($"Character by ID {id} gerado.");
-            return responseIdRickyMorty;
-        }
-        else
-        {
-            return "Not Found";
+            string apiUrl = $"https://rickandmortyapi.com/api/character/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    // Desserializa e filtra os dados
+                    var character = JsonConvert.DeserializeObject<CharacterModel>(jsonResponse);
+
+                    string filteredJson = JsonConvert.SerializeObject(character, Formatting.Indented);
+
+                    _logger.LogInformation($"Character by ID {id} gerado.");
+                    return filteredJson;
+                }
+                else
+                {
+                    _logger.LogWarning($"Falha ao buscar personagem com ID {id}: {response.StatusCode}");
+                    return "Not Found";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro ao obter personagem por ID: {ex.Message}");
+                return "Erro ao obter dados.";
+            }
         }
     }
 }

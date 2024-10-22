@@ -1,6 +1,7 @@
 ﻿using Api_RickAndMorty_DotNet.Service.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Api_RickAndMorty_DotNet.Controllers
 {
@@ -29,6 +30,6 @@ namespace Api_RickAndMorty_DotNet.Controllers
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
             return Ok(GetCharacterById);
-        }
+        } 
     }
 }
