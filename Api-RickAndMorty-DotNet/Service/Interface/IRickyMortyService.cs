@@ -4,4 +4,6 @@ public interface IRickyMortyService
 {
     Task<string> GetRickyMortyRandom();
     Task<string> GetRickyMortyById(int id);
+    Task<string> GetLocationRickMorty();
+    Task<string> GetLocationRickMortyById(int id);
 }

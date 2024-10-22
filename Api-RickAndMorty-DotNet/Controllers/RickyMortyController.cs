@@ -30,6 +30,20 @@ namespace Api_RickAndMorty_DotNet.Controllers
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
             return Ok(GetCharacterById);
-        } 
+        }
+
+        [HttpGet("Location")]
+        public async Task<ActionResult<string>> GetLocation()
+        {
+            string GetLocation = await _rickyMortyService.GetLocationRickMorty();
+            return Ok(GetLocation);
+        }
+
+        [HttpGet("LocationById/{id:int}")]
+        public async Task<ActionResult<string>> GetLocationById(int id)
+        {
+            string LocationById = await _rickyMortyService.GetLocationRickMortyById(id);
+            return Ok(LocationById);
+        }
     }
 }
