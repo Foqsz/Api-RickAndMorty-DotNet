@@ -23,5 +23,12 @@ namespace Api_RickAndMorty_DotNet.Controllers
             string GetCharacter = await _rickyMortyService.GetRickyMortyRandom();
             return Ok(GetCharacter);
         }
+
+        [HttpGet("CharacterById/{id:int}")]
+        public async Task<ActionResult<string>> GetCharacterById(int id)
+        {
+            string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
+            return Ok(GetCharacterById);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Api_RickAndMorty_DotNet.Service.Interface;
+using System;
 
 namespace Api_RickAndMorty_DotNet.Service;
 
@@ -16,7 +17,7 @@ public class RickyMortyService : IRickyMortyService
     public async Task<string> GetRickyMortyRandom()
     {
         Random randNum = new Random();
-        string RickyMorty = $"https://rickandmortyapi.com/api/character/{randNum.Next(500)}";
+        string RickyMorty = $"https://rickandmortyapi.com/api/character/{randNum.Next(826)}";
 
         var getRandomRickyMorty = await _httpClient.GetAsync(RickyMorty);
 
@@ -25,6 +26,24 @@ public class RickyMortyService : IRickyMortyService
             string responseRandomRickyMorty = await getRandomRickyMorty.Content.ReadAsStringAsync();
             _logger.LogInformation("Character aleatório gerado.");
             return responseRandomRickyMorty;
+        }
+        else
+        {
+            return "Not Found";
+        }
+    }
+
+    public async Task<string> GetRickyMortyById(int id)
+    {
+        string RickyMorty = $"https://rickandmortyapi.com/api/character/{id}";
+
+        var getIdRickyMorty = await _httpClient.GetAsync(RickyMorty);
+
+        if (getIdRickyMorty.IsSuccessStatusCode)
+        {
+            string responseIdRickyMorty = await getIdRickyMorty.Content.ReadAsStringAsync();
+            _logger.LogInformation($"Character by ID {id} gerado.");
+            return responseIdRickyMorty;
         }
         else
         {
