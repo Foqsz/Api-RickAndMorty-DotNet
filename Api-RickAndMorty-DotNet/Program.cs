@@ -11,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IRickyMortyService, RickyMortyService>();
+builder.Services.AddTransient<ILocationRickyMortyService, LocationRickyMortyService>();
+builder.Services.AddTransient<IEpisodesService, EpisodesService>();
+
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
