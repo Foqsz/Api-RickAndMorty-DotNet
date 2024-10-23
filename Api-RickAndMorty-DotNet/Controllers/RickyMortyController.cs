@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Swashbuckle.Swagger.Annotations;
 
 namespace Api_RickAndMorty_DotNet.Controllers
 {
@@ -17,8 +18,9 @@ namespace Api_RickAndMorty_DotNet.Controllers
             _rickyMortyService = rickyMortyService;
             _logger = logger;
         }
-
+         
         [HttpGet("RandomCharacter")]
+        [Tags("Characters")]
         public async Task<ActionResult<string>> GetCharacterRandom()
         {
             string GetCharacter = await _rickyMortyService.GetRickyMortyRandom();
@@ -26,6 +28,7 @@ namespace Api_RickAndMorty_DotNet.Controllers
         }
 
         [HttpGet("CharacterById/{id:int}")]
+        [Tags("Characters")]
         public async Task<ActionResult<string>> GetCharacterById(int id)
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
@@ -33,6 +36,7 @@ namespace Api_RickAndMorty_DotNet.Controllers
         }
 
         [HttpGet("Location")]
+        [Tags("Location")]
         public async Task<ActionResult<string>> GetLocation()
         {
             string GetLocation = await _rickyMortyService.GetLocationRickMorty();
@@ -40,6 +44,7 @@ namespace Api_RickAndMorty_DotNet.Controllers
         }
 
         [HttpGet("LocationById/{id:int}")]
+        [Tags("Location")]
         public async Task<ActionResult<string>> GetLocationById(int id)
         {
             string LocationById = await _rickyMortyService.GetLocationRickMortyById(id);
