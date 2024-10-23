@@ -1,8 +1,5 @@
-﻿using Api_RickAndMorty_DotNet.Service.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Swashbuckle.Swagger.Annotations;
+﻿using Api_RickAndMorty_DotNet.Service.Interface; 
+using Microsoft.AspNetCore.Mvc; 
 
 namespace Api_RickAndMorty_DotNet.Controllers
 {
@@ -19,36 +16,21 @@ namespace Api_RickAndMorty_DotNet.Controllers
             _logger = logger;
         }
          
-        [HttpGet("RandomCharacter")]
-        [Tags("Characters")]
+        [HttpGet("RandomCharacter")] 
         public async Task<ActionResult<string>> GetCharacterRandom()
         {
             string GetCharacter = await _rickyMortyService.GetRickyMortyRandom();
+            _logger.LogInformation("Character Random Gerado (Controller).");
             return Ok(GetCharacter);
         }
 
-        [HttpGet("CharacterById/{id:int}")]
-        [Tags("Characters")]
+        [HttpGet("CharacterById/{id:int}")] 
         public async Task<ActionResult<string>> GetCharacterById(int id)
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
+            _logger.LogInformation($"Character By Id {id} Gerado (Controller).");
             return Ok(GetCharacterById);
-        }
+        } 
 
-        [HttpGet("Location")]
-        [Tags("Location")]
-        public async Task<ActionResult<string>> GetLocation()
-        {
-            string GetLocation = await _rickyMortyService.GetLocationRickMorty();
-            return Ok(GetLocation);
-        }
-
-        [HttpGet("LocationById/{id:int}")]
-        [Tags("Location")]
-        public async Task<ActionResult<string>> GetLocationById(int id)
-        {
-            string LocationById = await _rickyMortyService.GetLocationRickMortyById(id);
-            return Ok(LocationById);
-        }
     }
 }
