@@ -5,18 +5,22 @@ namespace Api_RickAndMorty_DotNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RickyMortyController : ControllerBase
+    public class CharacterRickyMortyController : ControllerBase
     {
         private readonly IRickyMortyService _rickyMortyService;
         private readonly ILogger _logger;
 
-        public RickyMortyController(IRickyMortyService rickyMortyService, ILogger<RickyMortyController> logger)
+        public CharacterRickyMortyController(IRickyMortyService rickyMortyService, ILogger<CharacterRickyMortyController> logger)
         {
             _rickyMortyService = rickyMortyService;
             _logger = logger;
         }
          
-        [HttpGet("RandomCharacter")] 
+        /// <summary>
+        /// Gerar um character do Ricky And Morty Aleatório
+        /// </summary>
+        /// <returns>Retorna um Random Character</returns>
+        [HttpGet("RandomCharacter")]
         public async Task<ActionResult<string>> GetCharacterRandom()
         {
             string GetCharacter = await _rickyMortyService.GetRickyMortyRandom();
@@ -24,7 +28,13 @@ namespace Api_RickAndMorty_DotNet.Controllers
             return Ok(GetCharacter);
         }
 
-        [HttpGet("CharacterById/{id:int}")] 
+        /// <summary>
+        /// Gerar um character do Ricky And Morty pelo ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Retorna o ID escolhido</returns>
+        [HttpGet("CharacterById/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetCharacterById(int id)
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);

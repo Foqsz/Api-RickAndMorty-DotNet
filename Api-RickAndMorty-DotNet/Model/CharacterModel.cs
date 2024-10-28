@@ -1,4 +1,7 @@
-﻿namespace Api_RickAndMorty_DotNet.Model
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Api_RickAndMorty_DotNet.Model
 {
     public class CharacterModel
     {
@@ -9,17 +12,21 @@
         public string Type { get; set; }
         public string Gender { get; set; }
         public DateTime Created { get; set; }
+
+        [NotMapped]
         public Origin origin { get; set; }
-        public Location location { get; set; } 
+
+        [NotMapped]
+        public Location location { get; set; }
 
         public class Origin
         {
-            public string Name { get; set; } 
+            public string Name { get; set; }
         }
 
         public class Location
         {
-            public string Name { get; set; } 
+            public string Name { get; set; }
         }
     }
 }
