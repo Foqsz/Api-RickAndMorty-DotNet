@@ -3,6 +3,7 @@ using Api_RickAndMorty_DotNet.Model;
 using Api_RickAndMorty_DotNet.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace Api_RickAndMorty_DotNet.Service;
 
@@ -110,6 +111,48 @@ public class EpisodesService : IEpisodesService
         {
             _logger.LogError($"Erro ao buscar o episódio. {ex.Message}");
             return "error ao buscar episódio.";
+        }
+    }
+
+    public async Task<IEnumerable> GetEpisodesCharactersById(int id)
+    {
+        string apiUrl = $"https://rickandmortyapi.com/api/episode/{id}";
+
+        try
+        {
+            var episodeResponse = await _httpClient.GetAsync(apiUrl);
+
+            if (episodeResponse.IsSuccessStatusCode)
+            {
+                string episodeJsonResponse = await episodeResponse.Content.ReadAsStringAsync();
+                var episode = JsonConvert.DeserializeObject<EpisodesModel>(episodeJsonResponse);
+
+                // Lista para armazenar personagens
+                var characters = new List<CharacterModel>();
+
+                // Itera sobre a lista de URLs de personagens
+                foreach (var characterUrl in episode.Characters)
+                {
+                    var characterResponse = await _httpClient.GetAsync(characterUrl);
+                    if (characterResponse.IsSuccessStatusCode)
+                    {
+                        string characterJsonResponse = await characterResponse.Content.ReadAsStringAsync();
+                        var character = JsonConvert.DeserializeObject<CharacterModel>(characterJsonResponse);
+                        characters.Add(character);
+                    }
+                }
+
+                return characters;
+            }
+            else
+            {
+                return "Episódio não encontrado.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Erro ao buscar personagens do episódio: {ex.Message}");
+            return "Erro interno do servidor.";
         }
     }
 }

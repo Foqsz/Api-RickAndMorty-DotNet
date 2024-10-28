@@ -1,7 +1,9 @@
-﻿using Api_RickAndMorty_DotNet.Service;
+﻿using Api_RickAndMorty_DotNet.Model;
+using Api_RickAndMorty_DotNet.Service;
 using Api_RickAndMorty_DotNet.Service.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace Api_RickAndMorty_DotNet.Controllers
 {
@@ -32,6 +34,27 @@ namespace Api_RickAndMorty_DotNet.Controllers
             string LocationById = await _locationRickyMortyService.GetLocationRickMortyById(id);
             _logger.LogInformation($"Location By Id {id} Gerada (Controller).");
             return Ok(LocationById);
+        }
+
+        [HttpGet("LocationAndCharacters/{id:int}")]
+        public async Task<ActionResult<IEnumerable<LocationModel>>> GetCharactersInLocationById(int id)
+        {
+            try
+            {
+                var episodesCharacters = await _locationRickyMortyService.GetCharactersInLocationById(id);
+
+
+                if (episodesCharacters is null)
+                {
+                    return NotFound("Nenhum personagem encontrado para esta location.");
+                }
+
+                return Ok(episodesCharacters);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Erro interno do servidor.");
+            }
         }
     }
 }
