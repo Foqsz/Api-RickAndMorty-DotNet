@@ -34,6 +34,8 @@ builder.Services.AddSwaggerGen(c =>
             Url = new Uri("https://foqsz.github.io/"),
         }
     });
+     
+    c.EnableAnnotations();
 });
 
 builder.Services.AddTransient<IRickyMortyService, RickyMortyService>();

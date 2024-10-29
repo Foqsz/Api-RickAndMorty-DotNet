@@ -1,5 +1,6 @@
 ﻿using Api_RickAndMorty_DotNet.Service.Interface; 
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api_RickAndMorty_DotNet.Controllers
 {
@@ -22,6 +23,8 @@ namespace Api_RickAndMorty_DotNet.Controllers
         /// <returns>Retorna um Random Character</returns>
         [HttpGet("RandomCharacter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Gera e retorna characters do Rick and Morty aleatórios. ",
+                  Description = "Este endpoint gera uma lista de characters do Ricky And Morty aleatórios.")]
         public async Task<ActionResult<string>> GetCharacterRandom()
         {
             string GetCharacter = await _rickyMortyService.GetRickyMortyRandom();
@@ -36,6 +39,8 @@ namespace Api_RickAndMorty_DotNet.Controllers
         /// <returns>Retorna o ID escolhido</returns>
         [HttpGet("CharacterById/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Gera e retorna characters do Rick and Morty de acordo com o ID informado. ",
+                  Description = "Este endpoint gera uma lista de characters do Ricky And Morty de acordo com o ID informado.")]
         public async Task<ActionResult<string>> GetCharacterById(int id)
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
