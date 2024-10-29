@@ -97,7 +97,7 @@ namespace Api_RickAndMorty_DotNet.Service
 
                     var locationCharacters = new List<LocationModel>();
 
-                    // Carrega todos os personagens relacionados à localização
+                    // Carregando todos os personagens relacionados à localização
                     foreach (var locationCharactersUrl in location.Residents)
                     {
                         var locationCharacterResponse = await _httpClient.GetAsync(locationCharactersUrl);
@@ -111,13 +111,13 @@ namespace Api_RickAndMorty_DotNet.Service
                         }
                     }
 
-                    // Aplica a paginação
+                    // Aplicando a paginação
                     var paginatedCharacters = locationCharacters
                         .Skip((pageNumber - 1) * pageSize)
                         .Take(pageSize)
                         .ToList();
 
-                    // Retorna a resposta com metadados de paginação
+                    //mostrando dados da paginação (opcional)
                     return new
                     {
                         TotalCharacters = locationCharacters.Count,

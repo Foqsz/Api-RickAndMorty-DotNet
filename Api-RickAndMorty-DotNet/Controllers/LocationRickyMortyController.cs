@@ -20,40 +20,44 @@ namespace Api_RickAndMorty_DotNet.Controllers
             _logger = logger;
         }
 
-        [HttpGet("RandomLocation")] 
+        [HttpGet("RandomLocation")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<LocationModel>>> GetLocationRandom()
         {
             var GetLocation = await _locationRickyMortyService.GetLocationRickMorty();
             _logger.LogInformation("Location Random Gerada (Controller).");
-            return Ok(GetLocation);
+            return StatusCode(StatusCodes.Status200OK, GetLocation);
         }
 
-        [HttpGet("LocationById/{id:int}")] 
+        [HttpGet("LocationById/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<LocationModel>>> GetLocationById(int id)
         {
             var LocationById = await _locationRickyMortyService.GetLocationRickMortyById(id);
             _logger.LogInformation($"Location By Id {id} Gerada (Controller).");
-            return Ok(LocationById);
+            return StatusCode(StatusCodes.Status200OK, LocationById);
         }
 
         [HttpGet("LocationAndCharacters/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<LocationModel>>> GetCharactersInLocationById(int id, int pageNumber, int pageSize)
         {
             try
             {
                 var episodesCharacters = await _locationRickyMortyService.GetCharactersInLocationById(id, pageNumber, pageSize);
 
-
                 if (episodesCharacters is null)
                 {
-                    return NotFound("Nenhum personagem encontrado para esta location.");
+                    return StatusCode(StatusCodes.Status404NotFound, "Nenhum personagem encontrado para esta location.");
                 }
 
-                return Ok(episodesCharacters);
+                return StatusCode(StatusCodes.Status200OK, episodesCharacters);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Erro interno do servidor.");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro interno do servidor. Log: {ex.Message}");
             }
         }
     }

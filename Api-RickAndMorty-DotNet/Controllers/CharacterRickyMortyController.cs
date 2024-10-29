@@ -21,11 +21,12 @@ namespace Api_RickAndMorty_DotNet.Controllers
         /// </summary>
         /// <returns>Retorna um Random Character</returns>
         [HttpGet("RandomCharacter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetCharacterRandom()
         {
             string GetCharacter = await _rickyMortyService.GetRickyMortyRandom();
             _logger.LogInformation("Character Random Gerado (Controller).");
-            return Ok(GetCharacter);
+            return StatusCode(StatusCodes.Status200OK, GetCharacter);
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Api_RickAndMorty_DotNet.Controllers
         {
             string GetCharacterById = await _rickyMortyService.GetRickyMortyById(id);
             _logger.LogInformation($"Character By Id {id} Gerado (Controller).");
-            return Ok(GetCharacterById);
+            return StatusCode(StatusCodes.Status200OK, GetCharacterById);
         } 
 
     }

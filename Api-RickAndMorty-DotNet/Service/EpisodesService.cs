@@ -126,11 +126,9 @@ public class EpisodesService : IEpisodesService
             {
                 string episodeJsonResponse = await episodeResponse.Content.ReadAsStringAsync();
                 var episode = JsonConvert.DeserializeObject<EpisodesModel>(episodeJsonResponse);
-
-                // Lista para armazenar personagens
+                 
                 var characters = new List<CharacterModel>();
-
-                // Itera sobre a lista de URLs de personagens
+                 
                 foreach (var characterUrl in episode.Characters)
                 {
                     var characterResponse = await _httpClient.GetAsync(characterUrl);
@@ -148,6 +146,7 @@ public class EpisodesService : IEpisodesService
                     .Take(pageSize)
                     .ToList();
 
+                //mostrando dados da paginação (opcional)
                 return new
                 {
                     TotalEpisodes = characters.Count,

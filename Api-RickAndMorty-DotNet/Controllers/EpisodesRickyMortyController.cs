@@ -24,22 +24,27 @@ namespace Api_RickAndMorty_DotNet.Controllers
         }
 
         [HttpGet("EpisodesRandom")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EpisodesModel>>> GetEpisodesRandom()
         {
             var episodeRandom = await _episodesService.GetEpisodesRandom();
             _logger.LogInformation("Episódio Gerado.");
-            return Ok(episodeRandom);
+            return StatusCode(StatusCodes.Status200OK, episodeRandom);
         }
 
         [HttpGet("Episodes/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<CharacterModel>>> GetEpisodesById(int id)
         {
             var episodeId = await _episodesService.GetEpisodesById(id);
             _logger.LogInformation($"Gerado o episódio de id {id}");
-            return Ok(episodeId);
+            return StatusCode(StatusCodes.Status200OK, episodeId);
         }
 
         [HttpGet("CharactersInEpisodes/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<CharacterModel>>> GetCharactersByEpisodeId(int id, int pageNumber, int pageSize)
         {
             try
@@ -48,14 +53,14 @@ namespace Api_RickAndMorty_DotNet.Controllers
 
                 if (characters == null)
                 {
-                    return NotFound("Nenhum personagem encontrado para este episódio.");
+                    return StatusCode(StatusCodes.Status404NotFound, "Nenhum personagem encontrado para este episódio.");
                 }
 
-                return Ok(characters);
+                return StatusCode(StatusCodes.Status200OK, characters);
             }
             catch (Exception ex)
             { 
-                return StatusCode(500, "Erro interno do servidor.");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro interno do servidor. Causa: {ex.Message}");
             }
         }
     }
