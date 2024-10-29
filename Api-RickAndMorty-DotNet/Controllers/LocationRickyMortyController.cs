@@ -21,27 +21,27 @@ namespace Api_RickAndMorty_DotNet.Controllers
         }
 
         [HttpGet("RandomLocation")] 
-        public async Task<ActionResult<string>> GetLocationRandom()
+        public async Task<ActionResult<IEnumerable<LocationModel>>> GetLocationRandom()
         {
-            string GetLocation = await _locationRickyMortyService.GetLocationRickMorty();
+            var GetLocation = await _locationRickyMortyService.GetLocationRickMorty();
             _logger.LogInformation("Location Random Gerada (Controller).");
             return Ok(GetLocation);
         }
 
         [HttpGet("LocationById/{id:int}")] 
-        public async Task<ActionResult<string>> GetLocationById(int id)
+        public async Task<ActionResult<IEnumerable<LocationModel>>> GetLocationById(int id)
         {
-            string LocationById = await _locationRickyMortyService.GetLocationRickMortyById(id);
+            var LocationById = await _locationRickyMortyService.GetLocationRickMortyById(id);
             _logger.LogInformation($"Location By Id {id} Gerada (Controller).");
             return Ok(LocationById);
         }
 
         [HttpGet("LocationAndCharacters/{id:int}")]
-        public async Task<ActionResult<IEnumerable<LocationModel>>> GetCharactersInLocationById(int id)
+        public async Task<ActionResult<IEnumerable<LocationModel>>> GetCharactersInLocationById(int id, int pageNumber, int pageSize)
         {
             try
             {
-                var episodesCharacters = await _locationRickyMortyService.GetCharactersInLocationById(id);
+                var episodesCharacters = await _locationRickyMortyService.GetCharactersInLocationById(id, pageNumber, pageSize);
 
 
                 if (episodesCharacters is null)

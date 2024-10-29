@@ -24,27 +24,27 @@ namespace Api_RickAndMorty_DotNet.Controllers
         }
 
         [HttpGet("EpisodesRandom")]
-        public async Task<ActionResult<string>> GetEpisodesRandom()
+        public async Task<ActionResult<IEnumerable<EpisodesModel>>> GetEpisodesRandom()
         {
-            string episodeRandom = await _episodesService.GetEpisodesRandom();
+            var episodeRandom = await _episodesService.GetEpisodesRandom();
             _logger.LogInformation("Episódio Gerado.");
             return Ok(episodeRandom);
         }
 
         [HttpGet("Episodes/{id:int}")]
-        public async Task<ActionResult<string>> GetEpisodesById(int id)
+        public async Task<ActionResult<IEnumerable<CharacterModel>>> GetEpisodesById(int id)
         {
-            string episodeId = await _episodesService.GetEpisodesById(id);
+            var episodeId = await _episodesService.GetEpisodesById(id);
             _logger.LogInformation($"Gerado o episódio de id {id}");
             return Ok(episodeId);
         }
 
         [HttpGet("CharactersInEpisodes/{id:int}")]
-        public async Task<ActionResult<IEnumerable<CharacterModel>>> GetCharactersByEpisodeId(int id)
+        public async Task<ActionResult<IEnumerable<CharacterModel>>> GetCharactersByEpisodeId(int id, int pageNumber, int pageSize)
         {
             try
             { 
-                var characters = await _episodesService.GetEpisodesCharactersById(id);
+                var characters = await _episodesService.GetEpisodesCharactersById(id, pageNumber, pageSize);
 
                 if (characters == null)
                 {

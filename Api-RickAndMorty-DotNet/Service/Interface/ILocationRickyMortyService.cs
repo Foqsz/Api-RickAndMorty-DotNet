@@ -4,8 +4,8 @@ namespace Api_RickAndMorty_DotNet.Service.Interface
 {
     public interface ILocationRickyMortyService
     {
-        Task<string> GetLocationRickMorty();
-        Task<string> GetLocationRickMortyById(int id);
-        Task<IEnumerable> GetCharactersInLocationById(int id);
+        Task<IEnumerable> GetLocationRickMorty();
+        Task<IEnumerable> GetLocationRickMortyById(int id);
+        Task<object> GetCharactersInLocationById(int id, int pageNumber, int pageSize);
     }
 }

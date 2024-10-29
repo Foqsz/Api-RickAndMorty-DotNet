@@ -4,8 +4,8 @@ namespace Api_RickAndMorty_DotNet.Service.Interface
 {
     public interface IEpisodesService
     {
-        Task<string> GetEpisodesRandom();
-        Task<string> GetEpisodesById(int id);
-        Task<IEnumerable> GetEpisodesCharactersById(int id);
+        Task<IEnumerable> GetEpisodesRandom();
+        Task<IEnumerable> GetEpisodesById(int id);
+        Task<object> GetEpisodesCharactersById(int id, int pageNumber, int pageSize);
     }
 }

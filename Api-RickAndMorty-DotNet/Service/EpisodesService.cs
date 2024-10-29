@@ -20,9 +20,9 @@ public class EpisodesService : IEpisodesService
         _context = context;
     }
 
-    public async Task<string> GetEpisodesById(int id)
+    public async Task<IEnumerable> GetEpisodesById(int id)
     { 
-        string apiUrl = $"https://rickandmortyapi.com/api/episode/{id}";
+        var apiUrl = $"https://rickandmortyapi.com/api/episode/{id}";
 
         try
         {
@@ -69,7 +69,7 @@ public class EpisodesService : IEpisodesService
         }
     }
 
-    public async Task<string> GetEpisodesRandom()
+    public async Task<IEnumerable> GetEpisodesRandom()
     {
         Random randNum = new Random();
         string apiUrl = $"https://rickandmortyapi.com/api/episode/{randNum.Next(1, 51)}";
@@ -114,7 +114,7 @@ public class EpisodesService : IEpisodesService
         }
     }
 
-    public async Task<IEnumerable> GetEpisodesCharactersById(int id)
+    public async Task<object> GetEpisodesCharactersById(int id, int pageNumber = 1, int pageSize = 10)
     {
         string apiUrl = $"https://rickandmortyapi.com/api/episode/{id}";
 
@@ -141,8 +141,21 @@ public class EpisodesService : IEpisodesService
                         characters.Add(character);
                     }
                 }
+                 
+                //aplicando paginação
+                var paginatedEpisodes = characters
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
-                return characters;
+                return new
+                {
+                    TotalEpisodes = characters.Count,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(characters.Count / (double)pageSize),
+                    Characters = paginatedEpisodes
+                };
             }
             else
             {

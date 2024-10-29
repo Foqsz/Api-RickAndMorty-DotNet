@@ -16,10 +16,10 @@ namespace Api_RickAndMorty_DotNet.Service
             _httpClient = httpClient;
             _logger = logger;
         }
-        public async Task<string> GetLocationRickMorty()
+        public async Task<IEnumerable> GetLocationRickMorty()
         {
             Random randNum = new Random();
-            string apiUrl = $"https://rickandmortyapi.com/api/location/{randNum.Next(1, 126)}";
+            var apiUrl = $"https://rickandmortyapi.com/api/location/{randNum.Next(1, 126)}";
 
             try
             {
@@ -45,13 +45,13 @@ namespace Api_RickAndMorty_DotNet.Service
             catch (Exception ex)
             {
                 _logger.LogError("Erro ao buscar a location");
-                return "error ao buscar location";
+                return "Erro ao buscar location";
             }
         }
 
-        public async Task<string> GetLocationRickMortyById(int id)
+        public async Task<IEnumerable> GetLocationRickMortyById(int id)
         {
-            string apiUrl = $"https://rickandmortyapi.com/api/location/{id}";
+            var apiUrl = $"https://rickandmortyapi.com/api/location/{id}";
 
             try
             {
@@ -81,7 +81,7 @@ namespace Api_RickAndMorty_DotNet.Service
             }
         }
 
-        public async Task<IEnumerable> GetCharactersInLocationById(int id)
+        public async Task<object> GetCharactersInLocationById(int id, int pageNumber = 1, int pageSize = 10)
         {
             string apiUrl = $"https://rickandmortyapi.com/api/location/{id}";
 
@@ -97,6 +97,7 @@ namespace Api_RickAndMorty_DotNet.Service
 
                     var locationCharacters = new List<LocationModel>();
 
+                    // Carrega todos os personagens relacionados à localização
                     foreach (var locationCharactersUrl in location.Residents)
                     {
                         var locationCharacterResponse = await _httpClient.GetAsync(locationCharactersUrl);
@@ -108,18 +109,33 @@ namespace Api_RickAndMorty_DotNet.Service
                             var locationAndCharacter = JsonConvert.DeserializeObject<LocationModel>(locationCharacter);
                             locationCharacters.Add(locationAndCharacter);
                         }
-                    } 
-                    return locationCharacters;
+                    }
+
+                    // Aplica a paginação
+                    var paginatedCharacters = locationCharacters
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+
+                    // Retorna a resposta com metadados de paginação
+                    return new
+                    {
+                        TotalCharacters = locationCharacters.Count,
+                        PageNumber = pageNumber,
+                        PageSize = pageSize,
+                        TotalPages = (int)Math.Ceiling(locationCharacters.Count / (double)pageSize),
+                        Characters = paginatedCharacters
+                    };
                 }
                 else
                 {
-                    return "Nenhu character encontrado nessa location.";
+                    return "Nenhum character encontrado nessa location.";
                 }
             }
             catch (Exception ex)
             {
                 return $"Erro Not Found {ex.Message}";
             }
-        }
+        } 
     }
 }
