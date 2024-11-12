@@ -30,9 +30,9 @@ public class EpisodesService : IEpisodesService
 
             if (episodeResponse.IsSuccessStatusCode)
             {
-                string episodeJsonResponse = await episodeResponse.Content.ReadAsStringAsync();
+                string episodeJsonResponse = await episodeResponse.Content.ReadAsStringAsync(); //leia em forma de string
 
-                var episodeRickyMorty = JsonConvert.DeserializeObject<EpisodesModel>(episodeJsonResponse);
+                var episodeRickyMorty = JsonConvert.DeserializeObject<EpisodesModel>(episodeJsonResponse); // transforma o objeto
 
                 var episodeExist = await _context.EpisodesModels.FindAsync(episodeRickyMorty.Id);
 
@@ -48,7 +48,7 @@ public class EpisodesService : IEpisodesService
                     _logger.LogInformation($"Episódio Id {id} já está no banco de dados.");
                 }
 
-                var episodeFiltred = JsonConvert.SerializeObject(episodeRickyMorty, Formatting.Indented);
+                var episodeFiltred = JsonConvert.SerializeObject(episodeRickyMorty, Formatting.Indented); //transformando o objeto C# em json, com identação
                    
                 return episodeFiltred;
             }

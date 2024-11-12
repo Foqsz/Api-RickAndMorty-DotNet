@@ -1,9 +1,5 @@
 ﻿using Api_RickAndMorty_DotNet.Service.Interface;
-using Newtonsoft.Json;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;  
 using Api_RickAndMorty_DotNet.Model;
 
 namespace Api_RickAndMorty_DotNet.Service
